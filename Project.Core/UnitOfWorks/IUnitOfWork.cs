@@ -10,7 +10,7 @@ namespace Project.Core.UnitOfWorks
     {
         IProductRepository Products { get; }
         ICategoryRepository Categories { get; }
-        Task CommitAsync();
+        Task CommitAsync(); //Save()
         void Commit();
     }
 }
