@@ -7,9 +7,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Project.Core.Repositories;
+using Project.Core.Services;
 using Project.Core.UnitOfWorks;
 using Project.Data.Context;
+using Project.Data.Repositories;
 using Project.Data.UnitOfWorks;
+using Project.Service.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +33,11 @@ namespace Project.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
+            services.AddScoped(typeof(IService<>), typeof(BaseService<>));
+            services.AddScoped(typeof(ICategoryService), typeof(CategoryService));
+            services.AddScoped(typeof(IProductService), typeof(ProductService));
             services.AddDbContext<AppDbContext>(options =>
             {
                 options.UseSqlServer(Configuration["ConnectionStrings:SqlConStr"].ToString(), o=> 
@@ -36,7 +45,6 @@ namespace Project.API
                     o.MigrationsAssembly("Project.Data");
                 });
             });
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddControllers();
         }
 
