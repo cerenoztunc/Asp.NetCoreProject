@@ -31,7 +31,10 @@ namespace Project.API
         {
             services.AddDbContext<AppDbContext>(options =>
             {
-                options.UseSqlServer(Configuration["ConnectionStrings:SqlConStr"].ToString());
+                options.UseSqlServer(Configuration["ConnectionStrings:SqlConStr"].ToString(), o=> 
+                {
+                    o.MigrationsAssembly("Project.Data");
+                });
             });
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddControllers();
