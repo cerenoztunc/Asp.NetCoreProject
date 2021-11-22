@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Project.Core.Repositories;
+using Project.Data.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +12,9 @@ namespace Project.Data.Repositories
 {
     public class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : class
     {
-        protected readonly DbContext _context;
+        protected readonly AppDbContext _context;
         private readonly DbSet<TEntity> _dbSet;
-        public BaseRepository(DbContext context)
+        public BaseRepository(AppDbContext context)
         {
             _context = context;
             _dbSet = context.Set<TEntity>();

@@ -12,7 +12,7 @@ namespace Project.Data.Repositories
     public class ProductRepository : BaseRepository<Product>, IProductRepository
     {
         private AppDbContext _appDbContext { get => _context as AppDbContext; }
-        public ProductRepository(DbContext context):base(context)
+        public ProductRepository(AppDbContext context):base(context)
         {
 
         }
