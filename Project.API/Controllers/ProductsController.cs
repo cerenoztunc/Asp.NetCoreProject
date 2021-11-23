@@ -23,19 +23,20 @@ namespace Project.API.Controllers
             _productService = productService;
             _mapper = mapper;
         }
+        
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             var products = await _productService.GetAllAsync();
             return Ok(_mapper.Map<IEnumerable<ProductDto>>(products));
         }
+        [ServiceFilter(typeof(ProductNotFoundFilter))]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
             var product = await _productService.GetByIdAsync(id);
             return Ok(_mapper.Map<ProductDto>(product));
         }
-        [ValidationFilter]
         [HttpPost]
         public async Task<IActionResult> Save(ProductDto productDto)
         {
@@ -48,6 +49,7 @@ namespace Project.API.Controllers
             var updatedProduct =  _productService.Update(_mapper.Map<Product>(productDto));
             return NoContent();
         }
+        [ServiceFilter(typeof(ProductNotFoundFilter))]
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
@@ -55,6 +57,7 @@ namespace Project.API.Controllers
             _productService.Remove(deletedProduct);
             return NoContent();
         }
+        [ServiceFilter(typeof(ProductNotFoundFilter))]
         [HttpGet("{id}/category")]
         public async Task<IActionResult> GetWithCategoryById(int id)
         {

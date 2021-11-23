@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Project.API.Filters;
 using Project.Core.Repositories;
 using Project.Core.Services;
 using Project.Core.UnitOfWorks;
@@ -35,7 +36,7 @@ namespace Project.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAutoMapper(typeof(Startup));
-
+            services.AddScoped<ProductNotFoundFilter>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
             services.AddScoped(typeof(IService<>), typeof(BaseService<>));
@@ -48,7 +49,10 @@ namespace Project.API
                     o.MigrationsAssembly("Project.Data");
                 });
             });
-            services.AddControllers();
+            services.AddControllers(o=> 
+            {
+                o.Filters.Add(new ValidationFilter());
+            });
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.SuppressModelStateInvalidFilter = true;

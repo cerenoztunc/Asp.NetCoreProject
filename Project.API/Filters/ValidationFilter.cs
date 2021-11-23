@@ -17,12 +17,14 @@ namespace Project.API.Filters
             {
                 ErrorDto errorDto = new ErrorDto();
                 errorDto.Status = 400;
-                IEnumerable<ModelError> modelErrors = context.ModelState.Values.SelectMany(v => v.Errors);
+
+                IEnumerable<ModelError> modelErrors = context.ModelState.Values.SelectMany(x => x.Errors);
 
                 modelErrors.ToList().ForEach(x =>
                 {
                     errorDto.Errors.Add(x.ErrorMessage);
                 });
+
                 context.Result = new BadRequestObjectResult(errorDto);
             }
         }
