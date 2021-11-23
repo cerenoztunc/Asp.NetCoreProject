@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Project.API.DTOs;
+using Project.API.Filters;
 using Project.Core.Models;
 using Project.Core.Services;
 using System;
@@ -28,6 +29,7 @@ namespace Project.API.Controllers
             var categories = await _categoryService.GetAllAsync();
             return Ok(_mapper.Map<IEnumerable<CategoryDto>>(categories));
         }
+        [ServiceFilter(typeof(CategoryNotFoundFilter))]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -50,6 +52,7 @@ namespace Project.API.Controllers
             var updatedCategory = _categoryService.Update(_mapper.Map<Category>(categoryDto));
             return NoContent();
         }
+        [ServiceFilter(typeof(CategoryNotFoundFilter))]
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
@@ -57,6 +60,7 @@ namespace Project.API.Controllers
             _categoryService.Remove(deleteToCategory);
             return NoContent();
         }
+        [ServiceFilter(typeof(CategoryNotFoundFilter))]
         [HttpGet("{id}/products")]
         public async Task<IActionResult> GetWithProductsById(int id)
         {
