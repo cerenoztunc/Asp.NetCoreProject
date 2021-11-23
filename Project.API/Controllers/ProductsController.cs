@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Project.API.DTOs;
+using Project.API.Filters;
 using Project.Core.Models;
 using Project.Core.Services;
 using System;
@@ -34,6 +35,7 @@ namespace Project.API.Controllers
             var product = await _productService.GetByIdAsync(id);
             return Ok(_mapper.Map<ProductDto>(product));
         }
+        [ValidationFilter]
         [HttpPost]
         public async Task<IActionResult> Save(ProductDto productDto)
         {
