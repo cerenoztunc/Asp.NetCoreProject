@@ -14,7 +14,9 @@ namespace Project.API.Mapping
         {
             CreateMap<Category, CategoryDto>().ReverseMap();
             CreateMap<Category, CategoryWithProductDto>().ReverseMap();
-            CreateMap<Product, ProductDto>().ReverseMap();
+            CreateMap<Product, ProductDto>();
+            CreateMap<ProductDto, Product>();
+            CreateMap<Product, ProductWithCategoryDto>().ReverseMap();
         }
     }
 }
