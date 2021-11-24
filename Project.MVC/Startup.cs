@@ -1,9 +1,17 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Project.Core.Repositories;
+using Project.Core.Services;
+using Project.Core.UnitOfWorks;
+using Project.Data.Context;
+using Project.Data.Repositories;
+using Project.Data.UnitOfWorks;
+using Project.Service.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +31,18 @@ namespace Project.MVC
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>)); //generic olduklarýndan yapýsý bu þekilde..
+            services.AddScoped(typeof(IService<>), typeof(BaseService<>));
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddDbContext<AppDbContext>(options =>
+            {
+                options.UseSqlServer(Configuration["ConnectionStrings:SqlConStr"].ToString(), o =>
+                {
+                    o.MigrationsAssembly("Project.Data");
+                });
+            });
             services.AddControllersWithViews();
         }
 
