@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Project.Core.Models;
 using Project.Core.Services;
 using Project.MVC.DTOs;
+using Project.MVC.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,12 +26,7 @@ namespace Project.MVC.Controllers
             var categories = await _categoryService.GetAllAsync();
             return View(_mapper.Map<IEnumerable<CategoryDto>>(categories));
         }
-        [HttpGet]
-        public async Task<IActionResult> GetById(int id)
-        {
-            var category = await _categoryService.GetByIdAsync(id);
-            return View(_mapper.Map<CategoryDto>(category));
-        }
+        
         [HttpGet]
         public IActionResult Create()
         {
@@ -42,6 +38,24 @@ namespace Project.MVC.Controllers
             await _categoryService.AddAsync(_mapper.Map<Category>(categoryDto));
             return RedirectToAction("GetAll");
         }
-
+        [ServiceFilter(typeof(CategoryNotFoundFilter))]
+        [HttpGet]
+        public async Task<IActionResult> Update(int id)
+        {
+            var category = await _categoryService.GetByIdAsync(id);
+            return View(_mapper.Map<CategoryDto>(category));
+        }
+        [HttpPost]
+        public IActionResult Update(CategoryDto categoryDto)
+        {
+            _categoryService.Update(_mapper.Map<Category>(categoryDto));
+            return RedirectToAction("GetAll");
+        }
+        public async Task<IActionResult> Delete(int id)
+        {
+            var deletedCategory = await _categoryService.GetByIdAsync(id);
+            _categoryService.Remove(deletedCategory);
+            return RedirectToAction("GetAll");
+        }
     }
 }

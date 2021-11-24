@@ -13,8 +13,8 @@ namespace Project.MVC.Mapping
         public MapProfile()
         {
             CreateMap<Category, CategoryDto>().ReverseMap();
-            CreateMap<Product, ProductDto>().ReverseMap();
-            CreateMap<ProductWithCategoryDto, Product>().ReverseMap();
+            CreateMap<Product, ProductDto>();
+            CreateMap<ProductDto, Product>();
             CreateMap<Category, CategoryWithProductDto>().ReverseMap();
         }
     }

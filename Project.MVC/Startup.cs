@@ -12,6 +12,7 @@ using Project.Core.UnitOfWorks;
 using Project.Data.Context;
 using Project.Data.Repositories;
 using Project.Data.UnitOfWorks;
+using Project.MVC.Filters;
 using Project.Service.Services;
 using System;
 using System.Collections.Generic;
@@ -32,6 +33,7 @@ namespace Project.MVC
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<CategoryNotFoundFilter>();
             services.AddAutoMapper(typeof(Startup));
             services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>)); //generic olduklarýndan yapýsý bu þekilde..
             services.AddScoped(typeof(IService<>), typeof(BaseService<>));
